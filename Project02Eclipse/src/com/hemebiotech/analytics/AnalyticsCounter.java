@@ -3,22 +3,19 @@ package com.hemebiotech.analytics;
 import java.util.Map;
 
 public class AnalyticsCounter {
-	
-	public static void main(String args[]) throws Exception {
+	/**
+	 * Read symptoms and increment their counts from inputPath,
+	 * Write it out in outputPath
+	 */
+
+	public static void main(String args[]) {
 		final String inputPath = "Project02Eclipse/symptoms.txt";
 		final String outputPath = "Project02Eclipse/result.out";
 
-		ReadSymptomDataFromFile reader = new ReadSymptomDataFromFile(inputPath, outputPath);
-		// 1. Read data from symptoms.txt and create a map
-		Map<String, Integer> data = reader.GetSymptoms();
+		ISymptomReader reader = new ReadSymptomFromFile(inputPath);
+		Map<String, Integer> data = reader.readSymptomsFromFile();
 
-		// 2. Order data in map
-		Map<String, Integer> map = reader.OrderSymptoms(data);
-		System.out.println("result: " + map);
-
-		// 3. Write into result.out
-		reader.SetSymptoms(map);
-
-
+		ISymptomWriter writer = new WriteSymptomToFile(outputPath);
+		writer.writeSymptoms(data);
 	}
 }
