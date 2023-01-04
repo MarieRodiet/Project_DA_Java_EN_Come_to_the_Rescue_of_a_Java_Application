@@ -1,7 +1,6 @@
 package com.hemebiotech.analytics;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,9 +17,9 @@ public interface ISymptomReader {
 	 * 
 	 * @return a raw listing of all Symptoms obtained from a data source, duplicates are possible/probable
 	 */
-	List<String> GetSymptoms ();
+	Map<String, Integer> GetSymptoms ();
 
-	Map<String, String> OrderSymptoms(List<String> data);
+	Map<String, Integer> OrderSymptoms(Map<String, Integer> data);
 
-	void SetSymptoms(Map<String, String> map) throws IOException;
+	void SetSymptoms(Map<String, Integer> map) throws IOException;
 }

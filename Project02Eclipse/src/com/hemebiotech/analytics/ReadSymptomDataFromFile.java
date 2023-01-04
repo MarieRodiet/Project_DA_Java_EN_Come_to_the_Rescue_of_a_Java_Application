@@ -9,29 +9,37 @@ import java.util.*;
  */
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
-	private String filepath;
+	private String inputPath;
+	private String outputPath;
 	
 	/**
 	 * 
 	 * @param filepath a full or partial path to file with symptom strings in it, one per line
 	 */
-	public ReadSymptomDataFromFile (String filepath) {
-		this.filepath = filepath;
+	public ReadSymptomDataFromFile (String inputPath, String outputPath) {
+
+		this.inputPath = inputPath;
+		this.outputPath = outputPath;
 	}
 	
 	@Override
-	public List<String> GetSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
+	public Map<String, Integer> GetSymptoms() {
+		Map<String, Integer> result = new HashMap<>();
 		
-		if (filepath != null) {
+		if (this.inputPath != null) {
 			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
+				BufferedReader reader = new BufferedReader (new FileReader(this.inputPath));
 				String line = reader.readLine();
 				
 				while (line != null) {
-					result.add(line);
+					if(result.containsKey(line)){
+						//increment the index of that symptom
+						result.put(line, result.get(line) + 1);
+					}
+					else {
+						result.put(line, 1);
+					}
 					line = reader.readLine();
-					System.out.println("symptom from file: " + line);
 				}
 				reader.close();
 			} catch (IOException e) {
@@ -42,27 +50,20 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	}
 
 	@Override
-	public Map<String, String> OrderSymptoms(List<String> data) {
-		Map<String, String> map = new HashMap<>();
-		int index = 0;
-		for(String symptom : data){
-			map.put(symptom.toLowerCase(), new String(String.valueOf(index)));
-			index++;
-		}
-		return map;
+	public Map<String, Integer> OrderSymptoms(Map<String, Integer> data) {
+		Map<String, Integer> sorted = new TreeMap<>(data);
+		return sorted;
 	}
 
 	@Override
-	public void SetSymptoms(Map<String, String> map) throws IOException {
-		// next generate output
-		final String outputPath = "Project02Eclipse/result.out";
-		File file = new File (outputPath);
+	public void SetSymptoms(Map<String, Integer> map) throws IOException {
+		File file = new File (this.outputPath);
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new FileWriter(file));
-			FileWriter writer = new FileWriter(outputPath);
-			for(Map.Entry<String, String> entry : map.entrySet()){
-				writer.write(entry.getKey() + " : " + entry.getValue());
+			for(Map.Entry<String, Integer> entry : map.entrySet()){
+				bw.write(entry.getKey() + " : " + entry.getValue());
+
 				bw.newLine();
 			}
 			bw.flush();
@@ -79,6 +80,4 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 		}
 
 	}
-
-
 }

@@ -1,31 +1,24 @@
 package com.hemebiotech.analytics;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AnalyticsCounter {
 	
 	public static void main(String args[]) throws Exception {
-		// 1. Read data from symptoms.txt
-		ReadSymptomDataFromFile reader = new ReadSymptomDataFromFile("Project02Eclipse/symptoms.txt");
-		List<String> data = reader.GetSymptoms();
+		final String inputPath = "Project02Eclipse/symptoms.txt";
+		final String outputPath = "Project02Eclipse/result.out";
 
-		// 2. Order data in map <String, Integer>
-		Map<String, String> map = reader.OrderSymptoms(data);
+		ReadSymptomDataFromFile reader = new ReadSymptomDataFromFile(inputPath, outputPath);
+		// 1. Read data from symptoms.txt and create a map
+		Map<String, Integer> data = reader.GetSymptoms();
 
+		// 2. Order data in map
+		Map<String, Integer> map = reader.OrderSymptoms(data);
+		System.out.println("result: " + map);
 
-		// 3. Write ordered data into result.out
-		// create new HashMap
-		HashMap<String, String> test = new HashMap<>();
+		// 3. Write into result.out
+		reader.SetSymptoms(map);
 
-		// key-value pairs
-		map.put("rohit", "one");
-		map.put("Sam", "two");
-		map.put("jainie", "three");
-		reader.SetSymptoms(test);
-
-		
 
 	}
 }
