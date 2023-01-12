@@ -1,5 +1,6 @@
 package com.hemebiotech.analytics;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class AnalyticsCounter {
@@ -12,10 +13,14 @@ public class AnalyticsCounter {
 		final String inputPath = "Project02Eclipse/symptoms.txt";
 		final String outputPath = "Project02Eclipse/result.out";
 
+
 		ISymptomReader reader = new ReadSymptomFromFile(inputPath);
-		Map<String, Integer> data = reader.readSymptomsFromFile();
+		ArrayList<String> result = reader.getSymptoms();
+
+		ISymptomIncrementer incrementer = new IncrementSymptoms();
+		Map<String, Integer> map = incrementer.incrementSymptoms(result);
 
 		ISymptomWriter writer = new WriteSymptomToFile(outputPath);
-		writer.writeSymptoms(data);
+		writer.writeSymptoms(map);
 	}
 }

@@ -5,11 +5,12 @@ import java.util.*;
 
 public class ReadSymptomFromFile implements ISymptomReader {
 
-	private String inputPath;
+	final private String inputPath;
 
 	public ReadSymptomFromFile (String inputPath) {
 		this.inputPath = inputPath;
 	}
+	ArrayList<String> symptoms = new ArrayList<String>();
 
 	/***
 	 *
@@ -56,5 +57,30 @@ public class ReadSymptomFromFile implements ISymptomReader {
 		return result;
 	}
 
-
+	@Override
+	public ArrayList<String> getSymptoms() {
+		BufferedReader reader = null;
+		if (this.inputPath != null) {
+			try {
+				reader = new BufferedReader (new FileReader(this.inputPath));
+				String line = reader.readLine();
+				//add symptom on line to ArrayList<String> symptoms
+				while (line != null) {
+					this.symptoms.add(line);
+					line = reader.readLine();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			finally {
+				try{
+					reader.close();
+				}
+				catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		return this.symptoms;
+	}
 }
